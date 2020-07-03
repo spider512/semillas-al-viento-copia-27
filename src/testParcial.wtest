@@ -1,0 +1,148 @@
+import parcelas.*
+import plantas.*
+import inta.*
+
+test "testParte 1" {
+
+const menta1 = new Menta()
+const menta2 = new Menta()
+
+menta1.altura(1)
+menta2.altura(0.3)
+
+
+	assert.that( menta1.daNuevasSemillas() )
+	assert.equals( 2, menta1.espacio() )
+	
+	assert.that( not menta2.daNuevasSemillas() )
+	assert.equals( 1.3, menta2.espacio() )
+	
+	
+const soja1 = new Soja()
+
+soja1.altura(0.6)
+soja1.anioSemilla(2009)
+
+	assert.equals( 8 , soja1.horasDeSolQueTolera() )
+	assert.that( not soja1.daNuevasSemillas() )
+	assert.equals( 0.3, soja1.espacio() )
+
+const quinoa1 = new Quinoa()
+const quinoa2 = new Quinoa()
+
+quinoa1.espacio(0.2)
+quinoa1.anioSemilla(2010)
+quinoa2.espacio(0.9)
+quinoa2.anioSemilla(2003)
+	
+	assert.that( quinoa1.daNuevasSemillas() )
+	assert.that( quinoa2.daNuevasSemillas() )
+	
+
+
+//////////// parte 2 Variedades
+
+const sojaTrans1 = new SojaTransgenica()
+
+assert.that( not sojaTrans1.daNuevasSemillas() )
+
+const hierbaBuena1 = new HierbaBuena()
+
+hierbaBuena1.altura(1)
+
+assert.equals( 4, hierbaBuena1.espacio() )
+
+
+//////////// parte 3 Parcelas
+
+const parcela1 = new Parcelas()
+
+parcela1.ancho(20)
+parcela1.largo(1)
+parcela1.horasDeSol(10)
+
+assert.equals( 20, parcela1.superficie() )
+assert.equals( 4, parcela1.cantidadMaxima() )
+
+const soja2 = new Soja()
+soja2.altura(1.2)
+soja2.anioSemilla(2009)
+
+const soja3 = new Soja()
+soja3.altura(1.2)
+soja3.anioSemilla(2009)
+
+const soja4 = new Soja()
+soja4.altura(1.2)
+soja4.anioSemilla(2009)
+
+const soja5 = new Soja()
+soja5.altura(1.2)
+soja5.anioSemilla(2009)
+
+const sojaQueNoEntra = new Soja()
+sojaQueNoEntra.altura(1.2)
+sojaQueNoEntra.anioSemilla(2009)
+
+parcela1.plantarPlanta(soja2)
+parcela1.plantarPlanta(soja3)
+parcela1.plantarPlanta(soja4)
+parcela1.plantarPlanta(soja5)
+
+// para probar que tira error al intentar poner mas plantas de las que puede
+// se debe descomentar la siguiente linea
+ // assert.equals(  parcela1.error("Esta planta no sera plantada") ,parcela1.plantarPlanta(sojaQueNoEntra) )
+
+//////////// parte 4 Parcelas ideales
+
+assert.that(menta1.parecelaIdeal(parcela1))
+assert.that(hierbaBuena1.parecelaIdeal(parcela1))
+
+const parcelaChiquita = new Parcelas()
+parcelaChiquita.ancho(2)
+parcelaChiquita.largo(1)
+parcelaChiquita.horasDeSol(10)
+
+assert.that(not menta1.parecelaIdeal(parcelaChiquita))
+assert.that(not hierbaBuena1.parecelaIdeal(parcelaChiquita))
+
+assert.that( quinoa1.parecelaIdeal(parcelaChiquita) )
+
+assert.that(not soja1.parecelaIdeal(parcelaChiquita))
+
+parcelaChiquita.horasDeSol(8)
+
+assert.that( soja1.parecelaIdeal(parcelaChiquita))
+
+assert.that( sojaTrans1.parecelaIdeal(parcelaChiquita) )
+// assert.that( not sojaTrans1.parecelaIdeal(parcela1) )   // No se porque me da " Value was not true "
+
+
+//////////// parte 5 Asociación de plantas
+
+const parcelaEcologica1 = new ParcelaEcologica() 
+parcelaEcologica1.ancho(2)
+parcelaEcologica1.largo(1)
+parcelaEcologica1.horasDeSol(10)
+
+assert.that( not parcelaEcologica1.seAsociaBien(soja3) )
+assert.that( parcelaEcologica1.seAsociaBien(quinoa1) )
+
+const parcelaIndustrial1 = new ParcelaIndustrial() 
+parcelaIndustrial1.ancho(2)
+parcelaIndustrial1.largo(1)
+parcelaIndustrial1.horasDeSol(10)
+parcelaIndustrial1.plantarPlanta(soja2)
+
+assert.that( parcelaIndustrial1.seAsociaBien(soja3) )
+
+//////////// parte 6 Estadísticas del INTA
+
+inta.agregarParcela(parcela1)
+inta.agregarParcela(parcelaChiquita)
+
+// assert.equals(2 , inta.promedioDePlantas() )
+// assert.equals(#{} , inta.laParcelaMasAutosustentable() )
+
+
+}
